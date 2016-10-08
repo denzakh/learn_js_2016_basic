@@ -1,0 +1,26 @@
+{
+  "name": "learn_js_2016_basic",
+  "version": "1.0.0",
+  "description": "Учебный проект Захарченко Дениса  из курса по JavaScript/DOM/интерфейсам на сайте [learn.javascript.ru](http://learn.javascript.ru)",
+  "main": "server.js",
+  "dependencies": {
+    "node-static": "^0.7.9",
+    "jsdoc": "^3.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denzakh/learn_js_2016_basic.git"
+  },
+  "keywords": [],
+  "author": "Denis Zakharchenko <den.zakh@gmail.com> (http://denzakh.ru)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denzakh/learn_js_2016_basic/issues"
+  },
+  "homepage": "https://github.com/denzakh/learn_js_2016_basic#readme"
+}
