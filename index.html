@@ -2,29 +2,51 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+  <meta name="theme-color" content="#220000">
 	<title>Учебный проект learn.javascript.ru</title>
 
-	<link rel="stylesheet" type="text/css" href="libs/pure/pure-min.css" />
-  <link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/base-min.css">
+  <link rel="stylesheet" type="text/css" href="components/app/app.css" />
 	<link rel="stylesheet" type="text/css" href="components/menu/menu.css" />
 </head>
 <body>
 
-  <div class="bookmark">
-    <form action="">
-      <div class="bookmark__list-box">
-        <h1 class="bookmark__title"></h1>
-        <div class="bookmark__list"></div>
-      </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"></script>
+  <script src="templates/template-menu.js"></script>
+  <!-- создает глобальный объект template и template.menu-->
 
-      <div class="bookmark__add-box pure-form">
-        <input type="text" class="bookmark__add-text" value="http://javascript.ru">
-        <button class="bookmark__add-btn pure-button">Добавить</button>
-      </div>
-    </form>
-  </div>
+  <script>
+
+
+
+
+
+console.log(window.jstemplate);
+
+
+
+
+
+    var data = {
+      title: "Заголовок",
+      list: "Список"
+    };
+
+    // импорт
+    var templateMenu = window.jstemplate;
+
+    var tmpl = _.template(templateMenu.menu);
+    var result = tmpl(data);
+    document.write( result );
+  </script>
 
   <script src="components/menu/menu.js"></script>
   <script src="components/app/app.js"></script>
+
+
+<script>
+
+</script>
+
 </body>
 </html>

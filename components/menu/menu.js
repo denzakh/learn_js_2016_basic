@@ -140,5 +140,6 @@
 
   // экспорт
   window.Menu = Menu;
+  window.testG = "testG";
 
 })();
