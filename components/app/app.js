@@ -32,6 +32,7 @@
     el: document.querySelector('.bookmark'),
     title: document.querySelector('.bookmark__title'),
     list: document.querySelector('.bookmark__list'),
+    input: document.querySelector('.bookmark__add-text'),
     data: menuData
   });
 

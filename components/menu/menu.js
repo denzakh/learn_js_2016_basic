@@ -12,6 +12,7 @@
       this.title = arg.title;
       this.data = arg.data;
       this.parentList = arg.list;
+      this.input = arg.input;
 
       // отрисовка начальных данных
       this.render();
@@ -23,16 +24,13 @@
 
     // --------------- Методы ---------------------
 
+    /// render - метод, отрисовывающий меню
     render () {
-      // заголовок
-      let title = this.title;
-      // нужно поменять на data-
-
-      title.innerHTML = this.data.title;
+      // создание заголовка
+      this.title.innerHTML = this.data.title;
       let parentList = this.parentList;
 
       // создание пунктов меню:
-
       // получаем пункты из настроек
       let items = this.data.items;
 
@@ -44,26 +42,27 @@
         addItemThis(item);
       }
 
-      // запускаем цикл перебора массива объектов, содержащих ссылки
+      // запускаем цикл перебора массива объектов содержащих ссылки,
+      // который вызывает метод addItem, создающий сохраненные пункты меню
       items.forEach( addRender);
 
     }
 
-    // метод, обабатывающий события на элементе el (в данном случае клики)
+    /// _initEvents - метод, обабатывающий события на элементе el (клики)
     // при всплытие на el события 'click', метод запустит функцию _onClick
     _initEvents () {
       this.el.addEventListener('click', this._onClick.bind(this));
     }
 
-    // метод, обабатывающий клик
+    /// _onClick - метод, обабатывающий клик
     // здесь event - это объект события, переданный из
     // _initEvents через _onClick.bind(this);
-
     _onClick (event) {
       // определяем элемент, по которому непосредственно кликнули
       // (свойство target объекта event)
       let target = event.target;
 
+      // определяет элемент, на котором возникло событие
       switch(target.dataset.action) {
         case 'bookmark__add':
         // нажата кнопка добавить --> добавить пункт в меню
@@ -80,87 +79,74 @@
 
     }
 
-    // метод, добавляющий пункт в меню
+    /// addItem - метод, добавляющий пункт в меню
     addItem (item, parentList = this.parentList) {
 
-      // для каждого пункта создаем обертку и присваеваем ей класс
-      let bookmarkItem = document.createElement('div');
-      bookmarkItem.classList.add('bookmark__item');
-
       // получаем url
-      let url = '';
+      let url = this._urlValidation(item);
 
-      // проверяем наличие url в настройках
+      // проверяем url на пустоту
+      if (url) {
 
-      console.log(this);
-      //
-      if (item.anchor) {
-        url = item.anchor;
-        // console.log(this);
-      } else {
-        // console.log(this);
-        let input = this.el.querySelector('.bookmark__add-text');
-        url = input.value;
-        // url = this._urlValidation(url);
+        // для каждого пункта создаем обертку и присваеваем ей класс
+        let bookmarkItem = document.createElement('div');
+        bookmarkItem.classList.add('bookmark__item');
+
+        // создаем элемент а и получаем ее свойства
+        let a =  document.createElement('a');
+        a.href = url;
+        let host = a.hostname;
+        let hostname = host.charAt(0).toUpperCase() + host.slice(1);
+
+        // создаем фавикон
+        let faviconImgUrl = url + "/favicon.ico";
+        // bookmarkFavicon.appendChild(faviconImg);
+
+        // шаблон содержания пункта меню
+        let itemHtml = `
+              <div class="bookmark__favicon">
+                <img src="${faviconImgUrl}">
+              </div>
+              <div class="bookmark__link">
+                <a href="${url}">${hostname}</a>
+              </div>
+              <button class="bookmark__del" data-action="bookmark__del"></button>
+        `
+        // вставка содержания в пункт меню
+        bookmarkItem.innerHTML = itemHtml;
+        // вставка в документ готового пункта
+        parentList.appendChild(bookmarkItem);
       }
-
-      // создаем элемент а и получаем ее свойства
-      let a =  document.createElement('a');
-      a.href = url;
-      let host = a.hostname;
-      let hostname = host.charAt(0).toUpperCase() + host.slice(1);
-
-      // создаем фавикон
-      let faviconImgUrl = url + "/favicon.ico";
-      // bookmarkFavicon.appendChild(faviconImg);
-
-      // шаблон содержания пункта меню
-      let itemHtml = `
-            <div class="bookmark__favicon">
-              <img src="${faviconImgUrl}">
-            </div>
-            <div class="bookmark__link">
-              <a href="${url}">${hostname}</a>
-            </div>
-            <button class="bookmark__del" data-action="bookmark__del"></button>
-      `
-      // вставка содержания в пункт меню
-      bookmarkItem.innerHTML = itemHtml;
-      // вставка в документ готового пункта
-      parentList.appendChild(bookmarkItem);
 
     }
 
-    // метод, удаляющий пункт в меню
+    /// _urlValidation - метод, получающий и проверяющий url
+    _urlValidation (item) {
+
+      let url = '';
+      // проверяем наличие url в настройках, затем в input
+      if (item.anchor) {
+        url = item.anchor;
+      } else {
+        url = this.input.value;
+      }
+
+      // проверяем наличие url и отсутствие пробелов
+      if (url && (url.match(/\s/g) == null) ) {
+        // проверяем наличие протокола
+        if (url.indexOf("://") == -1) {
+          url = "http://" + url;
+        }
+      } else {
+        url = "";
+      }
+
+      return url;
+    }
+
+    /// delItem - метод, удаляющий пункт в меню
     delItem (target) {
       this.parentList.removeChild(target.parentElement);
-    }
-
-    _urlValidation (url) {
-      let isUrl = (url.indexOf("://") != -1) && (url.indexOf(".") != -1);
-      if (!isUrl) {
-        url = "http://" + url;
-      }
-      return url;
-    }
-
-    _urlValidation2 (item) {
-      let url = '';
-
-      // проверяем наличие url в настройках
-      if (item.anchor) {
-        url = item.anchor;
-      } else {
-        let input = this.el.querySelector('.bookmark__add-text');
-        url = input.value;
-        url = this._urlValidation(url);
-      }
-
-      let isUrl = (url.indexOf("://") != -1) && (url.indexOf(".") != -1);
-      if (!isUrl) {
-        url = "http://" + url;
-      }
-      return url;
     }
 
   }
