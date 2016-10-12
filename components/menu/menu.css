@@ -65,7 +65,7 @@
   max-width: 100%;
 }
 
-.bookmark__del-btn {
+.bookmark__del {
   display: none;
   position: absolute;
   right: 0;
@@ -79,11 +79,11 @@
   outline: none;
 }
 
-.bookmark__item:hover .bookmark__del-btn {
+.bookmark__item:hover .bookmark__del {
   display: block;
 }
 
-.bookmark__del-btn:before {
+.bookmark__del:before {
   content: "";
   position: absolute;
   top: 50%;
@@ -95,7 +95,7 @@
   z-index: 2;
 }
 
-.bookmark__del-btn:after {
+.bookmark__del:after {
   content: "";
   position: absolute;
   top: 50%;

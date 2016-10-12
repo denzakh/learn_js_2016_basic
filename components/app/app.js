@@ -30,6 +30,7 @@
     // data - объект menuData, содержащий
   new Menu({
     el: document.querySelector('.bookmark'),
+    title: document.querySelector('.bookmark__title'),
     list: document.querySelector('.bookmark__list'),
     data: menuData
   });

@@ -9,6 +9,7 @@
       // сохраняем аргументы в свойства экземпляра
       // el - имя контейнера, на котором будут отслежены всплывающие события
       this.el = arg.el;
+      this.title = arg.title;
       this.data = arg.data;
       this.parentList = arg.list;
 
@@ -24,21 +25,27 @@
 
     render () {
       // заголовок
-      let title = this.el.querySelector('.bookmark__title');
+      let title = this.title;
+      // нужно поменять на data-
+
       title.innerHTML = this.data.title;
       let parentList = this.parentList;
 
       // создание пунктов меню:
-      // создаем переменную для html
-      let menuList;
-      // пункты из настроек
-      let items = this.data.items;
-      let addRender = this.addItem;
 
-      // цикл перебора массива объектов, содержащих ссылки в поле anchor
-      items.forEach( function(item, i, arr) {
-        addRender(item, parentList);
-      } );
+      // получаем пункты из настроек
+      let items = this.data.items;
+
+      // сохраняем метод addItem в переменную с добавлением контекста
+      let addItemThis = this.addItem.bind(this);
+
+      // создаем функцию-коллбек для цикла forEach
+      function addRender (item) {
+        addItemThis(item);
+      }
+
+      // запускаем цикл перебора массива объектов, содержащих ссылки
+      items.forEach( addRender);
 
     }
 
@@ -49,24 +56,28 @@
     }
 
     // метод, обабатывающий клик
-    // здесь event - это объект события, переданный из _initEvents через _onClick.bind(this);
+    // здесь event - это объект события, переданный из
+    // _initEvents через _onClick.bind(this);
 
     _onClick (event) {
       // определяем элемент, по которому непосредственно кликнули
       // (свойство target объекта event)
       let target = event.target;
 
-      if (target.classList.contains("bookmark__add-btn") ) {
+      switch(target.dataset.action) {
+        case 'bookmark__add':
         // нажата кнопка добавить --> добавить пункт в меню
         event.preventDefault();
         this.addItem(target);
-      }
+        break;
 
-      if (target.classList.contains("bookmark__del-btn") ) {
+        case 'bookmark__del':
         // нажата кнопка удалить --> удалить пункт из меню
         event.preventDefault();
         this.delItem(target);
+        break;
       }
+
     }
 
     // метод, добавляющий пункт в меню
@@ -76,10 +87,64 @@
       let bookmarkItem = document.createElement('div');
       bookmarkItem.classList.add('bookmark__item');
 
-      // работа со ссылкой
-      let bookmarkLink =  document.createElement('div');
-      bookmarkLink.classList.add('bookmark__link');
       // получаем url
+      let url = '';
+
+      // проверяем наличие url в настройках
+
+      console.log(this);
+      //
+      if (item.anchor) {
+        url = item.anchor;
+        // console.log(this);
+      } else {
+        // console.log(this);
+        let input = this.el.querySelector('.bookmark__add-text');
+        url = input.value;
+        // url = this._urlValidation(url);
+      }
+
+      // создаем элемент а и получаем ее свойства
+      let a =  document.createElement('a');
+      a.href = url;
+      let host = a.hostname;
+      let hostname = host.charAt(0).toUpperCase() + host.slice(1);
+
+      // создаем фавикон
+      let faviconImgUrl = url + "/favicon.ico";
+      // bookmarkFavicon.appendChild(faviconImg);
+
+      // шаблон содержания пункта меню
+      let itemHtml = `
+            <div class="bookmark__favicon">
+              <img src="${faviconImgUrl}">
+            </div>
+            <div class="bookmark__link">
+              <a href="${url}">${hostname}</a>
+            </div>
+            <button class="bookmark__del" data-action="bookmark__del"></button>
+      `
+      // вставка содержания в пункт меню
+      bookmarkItem.innerHTML = itemHtml;
+      // вставка в документ готового пункта
+      parentList.appendChild(bookmarkItem);
+
+    }
+
+    // метод, удаляющий пункт в меню
+    delItem (target) {
+      this.parentList.removeChild(target.parentElement);
+    }
+
+    _urlValidation (url) {
+      let isUrl = (url.indexOf("://") != -1) && (url.indexOf(".") != -1);
+      if (!isUrl) {
+        url = "http://" + url;
+      }
+      return url;
+    }
+
+    _urlValidation2 (item) {
       let url = '';
 
       // проверяем наличие url в настройках
@@ -91,43 +156,6 @@
         url = this._urlValidation(url);
       }
 
-      // создаем ссылку
-      let a =  document.createElement('a');
-      a.href = url;
-      let host = a.hostname;
-      let hostname = host.charAt(0).toUpperCase() + host.slice(1);
-      let protocol = a.protocol.replace(':','');
-      a.innerHTML = hostname;
-      bookmarkLink.appendChild(a);
-
-      // создаем фавикон
-      let bookmarkFavicon = document.createElement('div');
-      bookmarkFavicon.classList.add('bookmark__favicon');
-      let faviconImg = document.createElement('img');
-      faviconImg.src = protocol + "://" + host + "/favicon.ico";
-      bookmarkFavicon.appendChild(faviconImg);
-
-      // создаем кнопку удаления
-      let bookmarkDel = document.createElement('button');
-      bookmarkDel.classList.add('bookmark__del-btn');
-
-      // собираем внутренние части пункта меню вместе
-      bookmarkItem.appendChild(bookmarkFavicon);
-      bookmarkItem.appendChild(bookmarkLink);
-      bookmarkItem.appendChild(bookmarkDel);
-
-      console.log(parentList);
-      // вставка в документ
-      parentList.appendChild(bookmarkItem);
-
-    }
-
-    // метод, удаляющий пункт в меню
-    delItem (target) {
-      this.parentList.removeChild(target.parentElement);
-    }
-
-    _urlValidation (url) {
       let isUrl = (url.indexOf("://") != -1) && (url.indexOf(".") != -1);
       if (!isUrl) {
         url = "http://" + url;

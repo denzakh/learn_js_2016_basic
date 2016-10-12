@@ -8,7 +8,7 @@ jstemplate.menu = `
     <div class="bookmark">
       <form action="">
         <div class="bookmark__list-box">
-          <h1 class="bookmark__title">
+          <h1 class="bookmark__title" >
             <%=title%>
           </h1>
           <div class="bookmark__list">
@@ -18,7 +18,7 @@ jstemplate.menu = `
 
         <div class="bookmark__add-box">
           <input type="text" class="bookmark__add-text" value="http://javascript.ru">
-          <button class="bookmark__add-btn btn">Добавить</button>
+          <button class="bookmark__add btn" data-action="bookmark__add">Добавить</button>
         </div>
       </form>
     </div>
