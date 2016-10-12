@@ -8,10 +8,30 @@
     constructor (arg) {
       // сохраняем аргументы в свойства экземпляра
       // el - имя контейнера, на котором будут отслежены всплывающие события
+
       this.el = document.querySelector(arg.el);
       this.title = document.querySelector(arg.title);
       this.parentList = document.querySelector(arg.list);
       this.input = document.querySelector(arg.input);
+
+      try {
+
+        if (!this.el) {
+          throw "неправильно указан класс корневого элемента приложения (" + arg.el + ")";
+        }
+        if (!this.title) {
+          throw "неправильно указан класс заголовка формы (" + arg.title + ")";
+        }
+        if (!this.parentList) {
+          throw "неправильно указан класс элемента, содержащего список пунктов меню (" + arg.list + ")";
+        }
+        if (!this.input) {
+          throw "неправильно указан класс элемента ввода input (" + arg.input + ")";
+        }
+
+      } catch (e) {
+        console.log( "Ошибка в настройках: " + e);
+      }
 
       this.data = arg.data;
       // отрисовка начальных данных
