@@ -8,12 +8,12 @@
     constructor (arg) {
       // сохраняем аргументы в свойства экземпляра
       // el - имя контейнера, на котором будут отслежены всплывающие события
-      this.el = arg.el;
-      this.title = arg.title;
-      this.data = arg.data;
-      this.parentList = arg.list;
-      this.input = arg.input;
+      this.el = document.querySelector(arg.el);
+      this.title = document.querySelector(arg.title);
+      this.parentList = document.querySelector(arg.list);
+      this.input = document.querySelector(arg.input);
 
+      this.data = arg.data;
       // отрисовка начальных данных
       this.render();
 

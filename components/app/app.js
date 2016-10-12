@@ -8,6 +8,7 @@
   let menuData = {
     title: 'Проект закладок сайтов на JS',
     items: [
+    // если комментарий
       {
         anchor: 'http://mail.ru'
       },
@@ -23,17 +24,21 @@
     ]
   };
 
+  let setting = {
+    // класс формы (корневой элемент приложения)
+    el: '.bookmark',
+    // элемент заголовка
+    title: '.bookmark__title',
+    // элемент, содержащий список ссылок
+    list: '.bookmark__list',
+    // элемент ввода новых ссылок
+    input: '.bookmark__add-text',
+    // данные
+    data: menuData
+  }
+
     // создаем объект (новый экземпляр класса) Menu и передаем ему
     // обыект с настройками:
-    // el - имя контейнера, на котором будут отслежены всплывающие события
-    // list - родительский элемент для списка ссылок
-    // data - объект menuData, содержащий
-  new Menu({
-    el: document.querySelector('.bookmark'),
-    title: document.querySelector('.bookmark__title'),
-    list: document.querySelector('.bookmark__list'),
-    input: document.querySelector('.bookmark__add-text'),
-    data: menuData
-  });
+  new Menu(setting);
 
 })();
