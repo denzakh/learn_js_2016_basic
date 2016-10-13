@@ -101,8 +101,7 @@
     /// _initEvents - метод, обабатывающий события на элементе el (корневой)
     // так, при всплытие на el события 'click', метод запустит функцию _onClick
     _initEvents () {
-      this._onClick = this._onClick.bind(this);
-      this.el.addEventListener('click', this._onClick);
+      this.el.addEventListener('click', this._onClick.bind(this));
     }
 
     /// _onClick - метод, обабатывающий клик
