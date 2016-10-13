@@ -98,10 +98,11 @@
 
     }
 
-    /// _initEvents - метод, обабатывающий события на элементе el (клики)
-    // при всплытие на el события 'click', метод запустит функцию _onClick
+    /// _initEvents - метод, обабатывающий события на элементе el (корневой)
+    // так, при всплытие на el события 'click', метод запустит функцию _onClick
     _initEvents () {
-      this.el.addEventListener('click', this._onClick.bind(this));
+      this._onClick = this._onClick.bind(this);
+      this.el.addEventListener('click', this._onClick);
     }
 
     /// _onClick - метод, обабатывающий клик
@@ -160,7 +161,7 @@
               <div class="bookmark__link">
                 <a href="${url}">${hostname}</a>
               </div>
-              <button class="bookmark__del" data-action="bookmark__del"></button>
+              <button class="bookmark__del" type="button" data-action="bookmark__del"></button>
         `
         // вставка содержания в пункт меню
         bookmarkItem.innerHTML = itemHtml;
