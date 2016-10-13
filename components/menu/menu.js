@@ -6,13 +6,33 @@
 
     // конструктор запишит свойства в создаваемый экземпляр класса Меню
     constructor (arg) {
-      // сохраняем аргументы в свойства экземпляра
-      // el - имя контейнера, на котором будут отслежены всплывающие события
 
+      // получаем настройки и сохраняем аргументы в свойства
       this.el = document.querySelector(arg.el);
       this.title = document.querySelector(arg.title);
       this.parentList = document.querySelector(arg.list);
       this.input = document.querySelector(arg.input);
+
+      // получаем данные
+      this.data = arg.data;
+
+      // проверяем настройки на ошибки
+      if (this._isErrorSetting(arg) && this._isErrorData(arg)) {
+
+      // отрисовка начальных данных
+      this.render();
+
+      // вызываем (инициализируем) обработчики событий
+      this._initEvents ();
+      }
+
+
+    }
+
+    // --------------- Методы ---------------------
+
+    /// _isErrorSetting - метод проверки на ошибки настроек
+    _isErrorSetting (arg) {
 
       try {
 
@@ -29,20 +49,30 @@
           throw "неправильно указан класс элемента ввода input (" + arg.input + ")";
         }
 
+        return true;
+
       } catch (e) {
         console.log( "Ошибка в настройках: " + e);
       }
 
-      this.data = arg.data;
-      // отрисовка начальных данных
-      this.render();
-
-      // вызываем (инициализируем) обработчики событий
-      this._initEvents ();
-
     }
 
-    // --------------- Методы ---------------------
+    /// _isErrorData - метод проверки на ошибки получения данных
+    _isErrorData (arg) {
+
+      try {
+
+        if (!this.data) {
+          throw "нет объекта данных (" + arg.data + ")";
+        }
+
+        return true;
+
+      } catch (e) {
+        console.log( "Ошибка получения данных: " + e);
+      }
+
+    }
 
     /// render - метод, отрисовывающий меню
     render () {
@@ -151,7 +181,7 @@
         url = this.input.value;
       }
 
-      // проверяем наличие url и отсутствие пробелов
+      // проверяем наличие url и отсутствие в нем пробелов
       if (url && (url.match(/\s/g) == null) ) {
         // проверяем наличие протокола
         if (url.indexOf("://") == -1) {

@@ -12,7 +12,6 @@ jstemplate.menu = `
             <%=title%>
           </h1>
           <div class="bookmark__list">
-            <%=list%>
           </div>
         </div>
 
