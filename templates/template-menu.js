@@ -20,7 +20,7 @@ jstemplate.menu = `
       </div>
     </form>
     `
-
+  //
   // экспорт
   window.jstemplate = jstemplate;
 
