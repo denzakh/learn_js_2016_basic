@@ -1,0 +1,16 @@
+{ "title": "Закладки сайтов на&nbsp;JavaScript",
+  "items": [
+    {
+      "anchor": "http://mail.ru"
+    },
+    {
+      "anchor": "http://yandex.ru"
+    },
+    {
+      "anchor": "http://yahoo.com"
+    },
+    {
+      "anchor": "http://google.com"
+    }
+  ]
+}

@@ -14,12 +14,13 @@
       this.input = document.querySelector(arg.input);
 
       // получаем данные
-      this.data = arg.data;
+      this.data = {};
 
       // проверяем настройки на ошибки
       if (this._isErrorSetting(arg) && this._isErrorData(arg)) {
 
       // отрисовка начальных данных
+      this.htmlList = [];
       this.render();
 
       // вызываем (инициализируем) обработчики событий
@@ -30,6 +31,37 @@
     }
 
     // --------------- Методы ---------------------
+
+
+    /// setData - метод, сохраняющий данные в поле data
+    setData (data) {
+      this.data = data;
+    }
+
+    /// render - метод, отрисовывающий меню
+    render () {
+      // создание заголовка
+      this.title.innerHTML = this.data.title;
+
+      // создание пунктов меню:
+      // получаем пункты из настроек
+      let items = this.data.items;
+
+      // сохраняем метод addItem в переменную с добавлением контекста
+      let addItemThis = this.addItem.bind(this);
+
+      // создаем функцию-коллбек для цикла forEach
+      function addRender (item) {
+        addItemThis(item);
+      }
+
+      // запускаем цикл перебора массива объектов содержащих ссылки,
+      // который вызывает метод addItem, создающий сохраненные пункты меню
+      items.forEach( addRender);
+
+      // склеиваем массив html и вставляем меню в документ
+      this.parentList.innerHTML = this.htmlList.join("");
+    }
 
     /// _isErrorSetting - метод проверки на ошибки настроек
     _isErrorSetting (arg) {
@@ -74,30 +106,6 @@
 
     }
 
-    /// render - метод, отрисовывающий меню
-    render () {
-      // создание заголовка
-      this.title.innerHTML = this.data.title;
-      let parentList = this.parentList;
-
-      // создание пунктов меню:
-      // получаем пункты из настроек
-      let items = this.data.items;
-
-      // сохраняем метод addItem в переменную с добавлением контекста
-      let addItemThis = this.addItem.bind(this);
-
-      // создаем функцию-коллбек для цикла forEach
-      function addRender (item) {
-        addItemThis(item);
-      }
-
-      // запускаем цикл перебора массива объектов содержащих ссылки,
-      // который вызывает метод addItem, создающий сохраненные пункты меню
-      items.forEach( addRender);
-
-    }
-
     /// _initEvents - метод, обабатывающий события на элементе el (корневой)
     // так, при всплытие на el события 'click', метод запустит функцию _onClick
     _initEvents () {
@@ -138,10 +146,6 @@
       // проверяем url на пустоту
       if (url) {
 
-        // для каждого пункта создаем обертку и присваеваем ей класс
-        let bookmarkItem = document.createElement('div');
-        bookmarkItem.classList.add('bookmark__item');
-
         // создаем элемент а и получаем ее свойства
         let a =  document.createElement('a');
         a.href = url;
@@ -150,22 +154,21 @@
 
         // создаем фавикон
         let faviconImgUrl = url + "/favicon.ico";
-        // bookmarkFavicon.appendChild(faviconImg);
 
         // шаблон содержания пункта меню
         let itemHtml = `
+            <div class="bookmark__item">
               <div class="bookmark__favicon">
-                <img src="${faviconImgUrl}">
+                <img src="${url}/favicon.ico">
               </div>
               <div class="bookmark__link">
                 <a href="${url}">${hostname}</a>
               </div>
               <button class="bookmark__del" type="button" data-action="bookmark__del"></button>
+            </div>
         `
-        // вставка содержания в пункт меню
-        bookmarkItem.innerHTML = itemHtml;
-        // вставка в документ готового пункта
-        parentList.appendChild(bookmarkItem);
+        // вставка пункта меню в массив html
+        this.htmlList.push(itemHtml);
       }
 
     }
@@ -201,9 +204,7 @@
 
   }
 
-
   // экспорт
   window.Menu = Menu;
-  window.testG = "testG";
 
 })();
