@@ -13,20 +13,14 @@
       this.parentList = document.querySelector(arg.list);
       this.input = document.querySelector(arg.input);
 
-      // получаем данные
-      this.data = {};
+      // делаем пустой массив для html
+      this.htmlList = [];
 
       // проверяем настройки на ошибки
-      if (this._isErrorSetting(arg) && this._isErrorData(arg)) {
-
-      // отрисовка начальных данных
-      this.htmlList = [];
-      this.render();
+      this._isErrorSetting(arg)
 
       // вызываем (инициализируем) обработчики событий
       this._initEvents ();
-      }
-
 
     }
 
@@ -42,7 +36,6 @@
     render () {
       // создание заголовка
       this.title.innerHTML = this.data.title;
-      console.log(this.data);
 
       // создание пунктов меню:
       // получаем пункты из настроек
