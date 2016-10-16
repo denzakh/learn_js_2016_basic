@@ -19,6 +19,7 @@
 
     /// setData - метод, обновляющий данные в _data
     setData (data) {
+      console.log("вызван метод setData");
       this._data = data;
       // отправка сообщения о событии обновления в _data
       this.trigger('update', this._data);
@@ -26,16 +27,20 @@
 
     /// getData - метод, забирающий данные из _data
     getData () {
+      console.log("вызван метод getData");
       return this._data;
     }
 
     // публичный метод, вызывается извне для обновления данных
     fetch () {
+      console.log("вызван метод fetch");
       this._makeRequest('GET', this.url);
     }
 
     // публичный метод, вызывается извне
     on (name, callback) {
+      console.log("вызван метод on c именем " + name + " и коллбеком");
+      console.log(callback);
       // проверяем, есть ли
       if (!this._handlers[name]) {
         // если в объекте с обработчиками событий нет свойства с названием события
@@ -45,6 +50,7 @@
       // если такой пустой массив уже точно есть,
       // то добавляем в него текущий callback - {name: [callback]}
       this._handlers[name].push(callback);
+      console.log("добавление колбека " + name + " в объект _handlers");
     }
 
       // при наступлении события из объекта с обработчиками событий
@@ -54,13 +60,18 @@
       // выполнить этот callback с переданными данными (аргументами)
       //
     trigger (name, data) {
+      console.log("вызван метод trigger c именем " + name + " и данными ");
+      console.log(data);
       if (this._handlers[name]) {
+        console.log("такое имя есть, вызывается цикл, выполняющий колбеки, ");
+        console.log("сохраненные под этим именем в объекте _handlers");
           this._handlers[name].forEach(callback => callback(data));
       }
     }
 
     /// _makeRequest - метод, делающий запрос к серверу
     _makeRequest (method, url) {
+      console.log("вызван метод _makeRequest, делающий запрос");
       // Создаём новый объект XMLHttpRequest
       var xhr = new XMLHttpRequest();
       // конфигурируем его: GET-запрос на URL
@@ -85,6 +96,8 @@
           // отправка сообщения о событии
           // передаем имя события и объект xhr текущего запроса
           this.trigger('fetch', xhr);
+          console.log("из _makeRequest вызван метод trigger");
+          console.log("с аргументами  'fetch' и xhr ");
           // обновление данных в _data
           this.setData(data);
 
