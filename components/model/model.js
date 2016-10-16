@@ -26,9 +26,10 @@
 
     /// getData - метод, забирающий данные из _data
     getData () {
-      return this.data;
+      return this._data;
     }
 
+    // публичный метод, вызывается извне для обновления данных
     fetch () {
       this._makeRequest('GET', this.url);
     }

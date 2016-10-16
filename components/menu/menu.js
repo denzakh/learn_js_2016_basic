@@ -42,6 +42,7 @@
     render () {
       // создание заголовка
       this.title.innerHTML = this.data.title;
+      console.log(this.data);
 
       // создание пунктов меню:
       // получаем пункты из настроек
