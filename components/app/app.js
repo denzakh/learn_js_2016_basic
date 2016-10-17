@@ -32,48 +32,29 @@
   // создаем объект Model (новый экземпляр класса)
   // и передаем ему обыект с настройками:
   let menuModel = new Model({
-    url: '/data/data.json'
+    url: 'https://firebasestorage.googleapis.com/v0/b/jsbookmark-ca1a5.appspot.com/o/data.json?alt=media&token=4b91f315-527d-4e82-9ca6-15b93c91f996'
   });
   console.log("создан объект menuModel");
 
-
+  // подготавливаем функции колбеки
   console.log("  Установка колбеков из app.js:");
-  console.log("  - Установка колбека 'update':");
-  // подготавливаем функцию обработки
-  menuModel.on('update', (data) => {
 
-    console.log("передаем данные из menuModel в menu:");
+  console.log("  - Установка колбека 'update':");
+
+  menuModel.on('fetch', (data) => {
+    console.log(" - передаем данные из menuModel в menu:");
     menu.setData(menuModel.getData());
     console.log("вызываеем render (внутри menuModel.on)");
     menu.render();
   });
 
-  console.log("  - Установка колбека 'add':");
+  console.log("  - Установка колбека 'save':");
   // добавление колбека на добавление пункта
-  menu.on ('add', (data) => {
-    // сохраняем новое значение из menu в menuModel._data
+  menu.on ('save', (data) => {
+    console.log(" - передаем данные из menu в menuModel:");
     menuModel.setData(menu.getData());
-    console.log("сохранили новое значение данных из menu в menuModel");
-    console.log(menuModel.getData());
-
-     // !!! ошибка, почему-то данные дописываются
-    // тут должен быть метод, кодирующий данные в json и отправляющий на сервер
-    // а потом вызывающий fetch
-    menuModel.fetch();
-
-  });
-
-  console.log("  - Установка колбека 'delite' в Menu:");
-  // подготавливаем функцию обработки
-  menuModel.on('del', (data) => {
-    console.log("передаем данные из menu в menuModel:");
-    menuModel.setData(menu.getData());
-    console.log("вызываеем Model.save (из app.js)");
     menuModel.save();
-    // console.log("вызываеем 'update' (из app.js)");
-    // menuModel.trigger('update');
   });
-
 
   // вызываем первичную орисовку
   console.log("  Первичная отрисовка:");

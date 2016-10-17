@@ -17,7 +17,7 @@
 
     /// setData - метод, обновляющий данные в _data
     setData (data) {
-      console.log("вызван метод Model.setData, данные сохранены");
+      console.log("вызван метод Model.setData, данные получены и сохранены");
       this._data = data;
       // отправка сообщения о событии обновления в _data
       // this.trigger('update', this._data);
@@ -25,7 +25,7 @@
 
     /// getData - метод, забирающий данные из _data
     getData () {
-      console.log("вызван метод Model.getData, данные получены");
+      console.log("вызван метод Model.getData, данные выданы");
       return this._data;
     }
 
@@ -38,7 +38,7 @@
     _onFetch(data, xhr) {
       console.log("вызов _onFetch");
       this.setData(data);
-      this.trigger('update', this._data);
+      this.trigger('fetch', this._data);
     }
 
     save () {
@@ -47,7 +47,8 @@
     }
 
     _onSave(data, xhr) {
-      this.trigger('save', xhr);
+      this.setData(data);
+      this.fetch();
     }
 
     // публичный метод, вызывается извне
@@ -74,20 +75,20 @@
       // выполнить этот callback с переданными данными (аргументами)
       //
     trigger (name, data) {
-      console.log("вызван метод Model.trigger c именем '" + name + "' и данными json");
+      console.log("вызван метод Model.trigger c именем '" + name + "' ");
 
       if (this._handlers[name]) {
-        console.log("Имя есть. Вызывается цикл, выполняющий колбеки, сохраненные под именем '" + name + "' в Model._handlers");
+        console.log("такое имя есть, активирован колбек для '" + name + "'");
           this._handlers[name].forEach(callback => callback(data));
       }
     }
 
     /// _makeRequest - метод, делающий запрос к серверу
     _makeRequest (method, url, callback) {
-      console.log("вызван метод _makeRequest (делающий запрос)");
+      console.log("вызван метод _makeRequest c методом " + method);
       // Создаём новый объект XMLHttpRequest
       var xhr = new XMLHttpRequest();
-      // конфигурируем его: GET-запрос на URL
+      // конфигурируем его: GET или PUT-запрос на URL
       xhr.open(method, url, true);
       // подписываемся на событие изменения статуса
       xhr.onreadystatechange = () => {
@@ -102,6 +103,7 @@
           // обработать ошибку
           console.log(xhr.status + ': ' + xhr.statusText);
         } else {
+          console.log("запрос удачно завершен");
           // получение данных
           let data = xhr.responseText;
           // парсигн JSON
@@ -115,8 +117,9 @@
           // обновление данных в _data
           // this.setData(data);
           //
+
           callback(data, xhr);
-          // console.log(callback);
+          console.log(callback);
         }
       };
 
@@ -124,7 +127,7 @@
 
       if (method == 'PUT') {
         data = JSON.stringify(this.getData());
-        console.log("json записан в строку");
+        console.log("json из Model.data записан в строку");
       }
 
       xhr.send(data);
