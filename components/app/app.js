@@ -45,21 +45,24 @@
     menu.render();
   });
 
+  // добавление колбека на добавление пункта
+  menu.on ('add', (data) => {
+    // сохраняем новое значение из menu в menuModel._data
+    menuModel.setData(menu.getData());
+    console.log("сохранили новое значение данных из menu в menuModel");
+    console.log(menuModel.getData());
+
+
+     // !!! ошибка, почему-то данные дописываются
+    // тут должен быть метод, кодирующий данные в json и отправляющий на сервер
+    // а потом вызывающий fetch
+    menuModel.fetch();
+  });
+
   // вызываем первичную орисовку
   menuModel.fetch();
 
-  // на событие update те данные,
-  // которые получаю в обработчике,
-  // буду устанавливать в менюшку
-  // console.log("из app.js вызван метод menuModel.on c агументом 'update' и колбеком ");
-  // console.log("состоящим из функции с арг data");
-  // menuModel.on('update', (data) => {
-  //   console.log("внутри menuModel.on('update', (data) )");
-  //   console.log("внутри menuModel.on вызывается setData");
-  //   Menu.setData (data);
-  //   console.log("внутри menuModel.on вызывается render");
-  //   Menu.render();
-  // });
+
 
   // указания на обновление данных
   // можно повесить на кнопку

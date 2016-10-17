@@ -16,6 +16,9 @@
       // делаем пустой массив для html
       this.htmlList = [];
 
+      // объект для хранения колбеков
+      this._handlers = {};
+
       // проверяем настройки на ошибки
       this._isErrorSetting(arg)
 
@@ -32,6 +35,11 @@
       this.data = data;
     }
 
+    /// setData - метод, сохраняющий данные в поле data
+    getData () {
+      return this.data;
+    }
+
     /// render - метод, отрисовывающий меню
     render () {
       // создание заголовка
@@ -42,7 +50,7 @@
       let items = this.data.items;
 
       // сохраняем метод addItem в переменную с добавлением контекста
-      let addItemThis = this.addItem.bind(this);
+      let addItemThis = this.addItemHtml.bind(this);
 
       // создаем функцию-коллбек для цикла forEach
       function addRender (item) {
@@ -119,7 +127,9 @@
         case 'bookmark__add':
         // нажата кнопка добавить --> добавить пункт в меню
         event.preventDefault();
-        this.addItem(target);
+        // this.addItem(target);
+        console.log("addMenu");
+        this.addItemInData(target);
         break;
 
         case 'bookmark__del':
@@ -131,8 +141,8 @@
 
     }
 
-    /// addItem - метод, добавляющий пункт в меню
-    addItem (item, parentList = this.parentList) {
+    /// addItem - метод, добавляющий пункты в меню
+    addItemHtml (item, parentList = this.parentList) {
 
       // получаем url
       let url = this._urlValidation(item);
@@ -165,6 +175,48 @@
         this.htmlList.push(itemHtml);
       }
 
+    }
+
+    /// addItemInData - метод, добавляющий пункт в данные
+    addItemInData (item, parentList = this.parentList) {
+
+      // получаем url
+      let url = this._urlValidation(item);
+
+      // проверяем url на пустоту
+      if (url) {
+        // вставка пункта меню в массив data.items
+        this.data.items.push({"anchor": url});
+
+        // this.trigger('add');
+      }
+    }
+
+    // публичный метод, вызывается извне
+    // устанавливает в _handlers функции-колбэки на имя
+    on (name, callback) {
+      console.log("вызван метод on c именем " + name + ", устанавливаем коллбек:");
+      console.log(callback);
+      // проверяем, есть ли
+      if (!this._handlers[name]) {
+        // если в объекте с обработчиками событий нет свойства с названием события
+        // то создадим такое свойство как пустой массив {name: []}
+        this._handlers[name] = [];
+      }
+      // если такой пустой массив уже точно есть,
+      // то добавляем в него текущий callback - {name: [callback]}
+      this._handlers[name].push(callback);
+      console.log("колбек под именем '" + name + "' добавлен в объект _handlers");
+    }
+
+    trigger (name, data) {
+      console.log("вызван метод trigger c именем '" + name + "' ");
+
+      if (this._handlers[name]) {
+        console.log("такое имя есть, вызывается цикл, выполняющий колбеки, ");
+        console.log("сохраненные под этим именем в объекте _handlers");
+          this._handlers[name].forEach(callback => callback(data));
+      }
     }
 
     /// _urlValidation - метод, получающий и проверяющий url
