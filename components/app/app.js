@@ -37,11 +37,11 @@
   console.log("создан объект menuModel");
 
 
-  console.log("  Установка колбеков:");
-  console.log("  - Установка колбека 'fetch':");
+  console.log("  Установка колбеков из app.js:");
+  console.log("  - Установка колбека 'update':");
   // подготавливаем функцию обработки
-  console.log("из app.js вызываем метод menuModel.on, устанавливающий функцию-колбек на имя 'fetch'");
   menuModel.on('update', (data) => {
+
     console.log("передаем данные из menuModel в menu:");
     menu.setData(menuModel.getData());
     console.log("вызываеем render (внутри menuModel.on)");
@@ -62,6 +62,18 @@
     menuModel.fetch();
 
   });
+
+  console.log("  - Установка колбека 'delite' в Menu:");
+  // подготавливаем функцию обработки
+  menuModel.on('del', (data) => {
+    console.log("передаем данные из menu в menuModel:");
+    menuModel.setData(menu.getData());
+    console.log("вызываеем Model.save (из app.js)");
+    menuModel.save();
+    // console.log("вызываеем 'update' (из app.js)");
+    // menuModel.trigger('update');
+  });
+
 
   // вызываем первичную орисовку
   console.log("  Первичная отрисовка:");

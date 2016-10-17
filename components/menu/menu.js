@@ -129,15 +129,15 @@
         case 'bookmark__add':
         // нажата кнопка добавить --> добавить пункт в меню
         event.preventDefault();
-        // this.addItem(target);
-        console.log("addMenu");
+        console.log("  Добавление пункта меню:");
         this.addItemInData(target);
         break;
 
         case 'bookmark__del':
         // нажата кнопка удалить --> удалить пункт из меню
         event.preventDefault();
-        this.delItem(target);
+        console.log("  Удаление пункта меню:");
+        this.delItemInData(target);
         break;
       }
 
@@ -189,6 +189,7 @@
       if (url) {
         // вставка пункта меню в массив data.items
         this.data.items.push({"anchor": url});
+
 
         // this.trigger('add');
       }
@@ -245,8 +246,20 @@
     }
 
     /// delItem - метод, удаляющий пункт в меню
-    delItem (target) {
-      this.parentList.removeChild(target.parentElement);
+    delItemInData (target) {
+      // определяем номер кликнутого элемента
+      for (var i = 0; i < this.parentList.children.length; i++) {
+        if (this.parentList.children[i] == target.parentElement) {
+          // узнаем название удалемого сайта
+          let removedName = target.parentElement.querySelector("[href]");
+          // let removedData = this.data.items[i].anchor
+          // удаляем сайт из данных
+          this.data.items.splice(i, 1);
+          console.log(removedName.innerHTML + " удален из данных");
+        };
+      }
+
+      // this.parentList.removeChild(target.parentElement);
     }
 
   }

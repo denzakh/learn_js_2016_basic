@@ -17,7 +17,7 @@
 
     /// setData - метод, обновляющий данные в _data
     setData (data) {
-      console.log("вызван метод Model.setData, данные сохранены в Model._data");
+      console.log("вызван метод Model.setData, данные сохранены");
       this._data = data;
       // отправка сообщения о событии обновления в _data
       // this.trigger('update', this._data);
