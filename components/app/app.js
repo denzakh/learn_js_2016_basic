@@ -23,6 +23,7 @@
   let Menu = window.Menu;
   let Model = window.Model;
 
+  console.log("  Cоздание объектов:");
   // создаем объект Menu (новый экземпляр класса)
   // и передаем ему обыект с настройками:
   let menu = new Menu(setting);
@@ -35,16 +36,19 @@
   });
   console.log("создан объект menuModel");
 
+
+  console.log("  Установка колбеков:");
+  console.log("  - Установка колбека 'fetch':");
   // подготавливаем функцию обработки
-  console.log("вызываем метод menuModel.on,");
-  console.log("устанавливающий функцию-колбек на имя 'update'");
+  console.log("из app.js вызываем метод menuModel.on, устанавливающий функцию-колбек на имя 'fetch'");
   menuModel.on('update', (data) => {
-    console.log("сохраняем данные из menuModel в menu");
+    console.log("передаем данные из menuModel в menu:");
     menu.setData(menuModel.getData());
     console.log("вызываеем render (внутри menuModel.on)");
     menu.render();
   });
 
+  console.log("  - Установка колбека 'add':");
   // добавление колбека на добавление пункта
   menu.on ('add', (data) => {
     // сохраняем новое значение из menu в menuModel._data
@@ -52,15 +56,19 @@
     console.log("сохранили новое значение данных из menu в menuModel");
     console.log(menuModel.getData());
 
-
      // !!! ошибка, почему-то данные дописываются
     // тут должен быть метод, кодирующий данные в json и отправляющий на сервер
     // а потом вызывающий fetch
     menuModel.fetch();
+
   });
 
   // вызываем первичную орисовку
+  console.log("  Первичная отрисовка:");
   menuModel.fetch();
+
+  // menuModel.save();
+
 
 
 

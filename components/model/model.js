@@ -20,7 +20,7 @@
       console.log("вызван метод Model.setData, данные сохранены в Model._data");
       this._data = data;
       // отправка сообщения о событии обновления в _data
-      this.trigger('update', this._data);
+      // this.trigger('update', this._data);
     }
 
     /// getData - метод, забирающий данные из _data
@@ -32,14 +32,28 @@
     // публичный метод, вызывается извне для обновления данных
     fetch () {
       console.log("вызван метод fetch");
-      this._makeRequest('GET', this.url);
+      this._makeRequest('GET', this.url, this._onFetch.bind(this));
+    }
+
+    _onFetch(data, xhr) {
+      console.log("вызов _onFetch");
+      this.setData(data);
+      this.trigger('update', this._data);
+    }
+
+    save () {
+      console.log("вызван метод save");
+      this._makeRequest('PUT', this.url, this._onSave.bind(this));
+    }
+
+    _onSave(data, xhr) {
+      this.trigger('save', xhr);
     }
 
     // публичный метод, вызывается извне
     // устанавливает в _handlers функции-колбэки на имя
     on (name, callback) {
-      console.log("вызван метод on c именем " + name + ", устанавливаем коллбек:");
-      console.log(callback);
+      console.log("вызван метод Model.on c именем " + name );
       // проверяем, есть ли
       if (!this._handlers[name]) {
         // если в объекте с обработчиками событий нет свойства с названием события
@@ -49,7 +63,7 @@
       // если такой пустой массив уже точно есть,
       // то добавляем в него текущий callback - {name: [callback]}
       this._handlers[name].push(callback);
-      console.log("колбек под именем '" + name + "' добавлен в объект _handlers");
+      console.log("колбек под именем '" + name + "' добавлен в объект Model._handlers");
     }
 
       // trigger выполняет функции по имени
@@ -60,17 +74,16 @@
       // выполнить этот callback с переданными данными (аргументами)
       //
     trigger (name, data) {
-      console.log("вызван метод trigger c именем '" + name + "' и данными json");
+      console.log("вызван метод Model.trigger c именем '" + name + "' и данными json");
 
       if (this._handlers[name]) {
-        console.log("такое имя есть, вызывается цикл, выполняющий колбеки, ");
-        console.log("сохраненные под этим именем в объекте _handlers");
+        console.log("Имя есть. Вызывается цикл, выполняющий колбеки, сохраненные под именем '" + name + "' в Model._handlers");
           this._handlers[name].forEach(callback => callback(data));
       }
     }
 
     /// _makeRequest - метод, делающий запрос к серверу
-    _makeRequest (method, url) {
+    _makeRequest (method, url, callback) {
       console.log("вызван метод _makeRequest (делающий запрос)");
       // Создаём новый объект XMLHttpRequest
       var xhr = new XMLHttpRequest();
@@ -93,19 +106,29 @@
           let data = xhr.responseText;
           // парсигн JSON
           data = JSON.parse(data);
-          console.log("Получен json");
+          console.log("получены данные из json");
           // отправка сообщения о событии
           // передаем имя события и объект xhr текущего запроса
           // this.trigger('fetch', xhr);
           // console.log("из _makeRequest вызван метод trigger");
           // console.log("с аргументами  'fetch' и xhr ");
           // обновление данных в _data
-          this.setData(data);
-
+          // this.setData(data);
+          //
+          callback(data, xhr);
+          // console.log(callback);
         }
       };
 
-      xhr.send();
+      let data = null;
+
+      if (method == 'PUT') {
+        data = JSON.stringify(this.getData());
+        console.log("json записан в строку");
+      }
+
+      xhr.send(data);
+      console.log("отправлен запрос на сервер");
     }
 
   }

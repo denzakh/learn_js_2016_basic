@@ -33,11 +33,13 @@
     /// setData - метод, сохраняющий данные в поле data
     setData (data) {
       this.data = data;
+      console.log("вызван метод Menu.setData, данные сохранены");
     }
 
     /// setData - метод, сохраняющий данные в поле data
     getData () {
       return this.data;
+      console.log("вызван метод Menu.getData, данные получены");
     }
 
     /// render - метод, отрисовывающий меню
@@ -195,8 +197,7 @@
     // публичный метод, вызывается извне
     // устанавливает в _handlers функции-колбэки на имя
     on (name, callback) {
-      console.log("вызван метод on c именем " + name + ", устанавливаем коллбек:");
-      console.log(callback);
+      console.log("вызван метод Menu.on c именем " + name );
       // проверяем, есть ли
       if (!this._handlers[name]) {
         // если в объекте с обработчиками событий нет свойства с названием события
@@ -206,7 +207,7 @@
       // если такой пустой массив уже точно есть,
       // то добавляем в него текущий callback - {name: [callback]}
       this._handlers[name].push(callback);
-      console.log("колбек под именем '" + name + "' добавлен в объект _handlers");
+      console.log("колбек под именем '" + name + "' добавлен в объект Menu._handlers");
     }
 
     trigger (name, data) {
