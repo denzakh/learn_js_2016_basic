@@ -32,7 +32,8 @@
   // создаем объект Model (новый экземпляр класса)
   // и передаем ему обыект с настройками:
   let menuModel = new Model({
-    url: 'https://firebasestorage.googleapis.com/v0/b/jsbookmark-ca1a5.appspot.com/o/data.json?alt=media&token=4b91f315-527d-4e82-9ca6-15b93c91f996'
+    url2: 'https://firebasestorage.googleapis.com/v0/b/jsbookmark-ca1a5.appspot.com/o/data.json?alt=media&token=4b91f315-527d-4e82-9ca6-15b93c91f996',
+    url: '/data/data.json'
   });
   console.log("создан объект menuModel");
 

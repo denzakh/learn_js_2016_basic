@@ -47,6 +47,7 @@
     }
 
     _onSave(data, xhr) {
+      console.log("вызов _onSave");
       this.setData(data);
       this.fetch();
     }

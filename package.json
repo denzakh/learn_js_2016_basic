@@ -4,14 +4,16 @@
   "description": "Учебный проект Захарченко Дениса  из курса по JavaScript/DOM/интерфейсам на сайте [learn.javascript.ru](http://learn.javascript.ru)",
   "main": "server.js",
   "dependencies": {
-    "jsdoc": "^3.4.2",
+    "express": "^4.14.0",
+    "jsdox": "^0.4.10",
     "jshint": "^2.9.3",
     "node-static": "^0.7.9"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node serverEx.js",
+    "node": "node serverNodeStatic.js",
     "hint": "jshint components/app/app.js components/menu/menu.js components/model/model.js",
     "fest": "./node_modules/.bin/fest-build --dir=components"
   },
